@@ -23,20 +23,20 @@ import { DalleMiniCommandDto } from './dalle-mini.dto';
  * @author Karafra
  */
 @IncludeInHelp({
-  name: '/ai-art dalle-mini',
+  name: '/art',
   description:
     'Generates collage of 9 images from given prompt using Dall-E ini model.',
-  usage: '/ai-art dalle-mini prompt: Liberty leading people to freedom',
+  usage: '/art create promp: Liberty leading people to freedom',
   parameters: [
     {
-      name: 'prompt',
-      description: 'Description of image',
-    },
+      name: 'promp',
+      description: 'The description of the image you want.',
+    }, 
   ],
 })
 @SubCommand({
-  name: 'dalle-mini',
-  description: 'generate AiArt based on given prompt using dall-e mini model',
+  name: 'create',
+  description: 'Generate a collage of AI generated art based on your description.',
 })
 @Injectable()
 @UsePipes(TransformPipe)
@@ -56,7 +56,7 @@ export class DalleMiniCommand
     executionContext: TransformedCommandExecutionContext<any>,
   ): Promise<void> {
     this.logger.debug('Dalle mini command called');
-    await executionContext.interaction.deferReply();
+    await executionContext.interaction.deferReply(`Please wait, generating an image based on your description`);
     this.sentryService.instance().addBreadcrumb({
       category: 'Commands',
       level: 'info',
@@ -69,10 +69,9 @@ export class DalleMiniCommand
       this.sentryService.instance().addBreadcrumb({
         category: 'Commands',
         level: 'info',
-        message: 'dalle-mini collage generated',
+        message: 'Art has been created',
       });
-      await executionContext.interaction.deleteReply();
-      const message = await executionContext.interaction.channel.send({
+            const message = await executionContext.interaction.followUp({
         files: [messageAttachmentWithDbRecord.attachment],
         content: `<@${executionContext.interaction.user.id}> \n\n :art: ${dto.prompt} :frame_photo:`,
       });
