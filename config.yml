@@ -4,15 +4,15 @@ sentry:
     name: "{SENTRY_RELEASE_NAME}"
 # This one is optional ... only if you want to use ai-story command
 openAi:
-  token: ...
+  token: process.env.OPEN
 amqp:
-  url: "{AMQP_URL}"
+  url: process.env.AMQP
 discord:
-  token: "{TOKEN}"
+  token: process.env.TOKEN
 deploy:
-  port: "{PORT}"
+  port: 3000
 mongo:
-  uri: "${MONGO_URI}"
+  uri: process.env.MONGO
 wombo-dream:
   api:
     url: "https://paint.api.wombo.ai/api"
